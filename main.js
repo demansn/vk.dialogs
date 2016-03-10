@@ -6,6 +6,19 @@ const querystring = require('querystring');
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
+const VK = require('vksdk');
+const ipcMain = electron.ipcMain;
+
+ipcMain.on('asynchronous-message', function(event, arg) {
+  console.log(arg);  // prints "ping"
+  event.sender.send('asynchronous-reply', 'pong');
+});
+
+ipcMain.on('synchronous-message', function(event, arg) {
+  console.log(arg);  // prints "ping"
+  event.returnValue = 'pong';
+});
+
 
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -20,7 +33,7 @@ function createWindow () {
 	mainWindow.loadURL('file://' + __dirname + '/index.html');
 
 	// Open the DevTools.
-	// mainWindow.webContents.openDevTools();
+	mainWindow.webContents.openDevTools();
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {
@@ -60,7 +73,7 @@ function auth(){
 	var authWindow = new BrowserWindow({width: 800, height: 600}),
 		webContents = authWindow.webContents;
 
-	authWindow.loadURL('https://oauth.vk.com/authorize?client_id=5329877&display=popup&redirect_uri=https://oauth.vk.com/blank.html&scope=friends&response_type=token&v=5.45');
+	authWindow.loadURL('https://oauth.vk.com/authorize?client_id=5329877&display=popup&redirect_uri=https://oauth.vk.com/blank.html&scope=messages&response_type=token&v=5.45');
 
 	webContents.on('did-get-redirect-request', function(e, oldURL, newURL, a, v, d){
 
@@ -71,7 +84,28 @@ function auth(){
 			console.log('access_token - ' + data.access_token)
 			console.log('expires_in - ' + data.expires_in)
 			console.log('user_id - ' + data.user_id)
+
+			vk.setSecureRequests(true);
+			vk.on('tokenByCodeReady', function() { });
+			vk.on('tokenByCodeNotReady', function(e) {
+				// обрабатываем ошибку установки токена 
+				console.dir(e);
+				console.log('tokenByCodeNotReady');
+			});
+
+			vk.setToken( data.access_token );
+			vk.request('messages.getDialogs', {'uids' : data.user_id}, function(e) {
+				console.dir(e.response.items[0]);
+			});
+
 		}
 
 	});
 }
+
+var vkApp = {id: 5329877, secret: 'SNY83LI0pH56lWZqB3R5'},
+	vk = new VK({
+		'appId'     : vkApp.id,
+		'appSecret' : vkApp.secret,
+		'mode'      : 'oauth'
+	});

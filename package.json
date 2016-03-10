@@ -26,5 +26,8 @@
   "devDependencies": {
     "electron-prebuilt": "^0.36.0",
     "node-inspector": "^0.12.7"
+  },
+  "dependencies": {
+    "vksdk": "^5.3.1"
   }
 }
