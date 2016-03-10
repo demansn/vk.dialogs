@@ -10,22 +10,23 @@ const VK = require('vksdk');
 const ipcMain = electron.ipcMain;
 
 ipcMain.on('asynchronous-message', function(event, arg) {
-  console.log(arg);  // prints "ping"
-  event.sender.send('asynchronous-reply', 'pong');
+	console.log(arg);  // prints "ping"
+	event.sender.send('asynchronous-reply', 'pong');
 });
 
 ipcMain.on('synchronous-message', function(event, arg) {
-  console.log(arg);  // prints "ping"
-  event.returnValue = 'pong';
+	console.log(arg);  // prints "ping"
+	event.returnValue = 'pong';
 });
 
+var level = require('level');
+var userDb = level('./db/userDb');
+var dialogsDb = level('./db/dialogsDb');
 
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
 function createWindow () {
+	
 	// Create the browser window.
 	mainWindow = new BrowserWindow({width: 800, height: 600});
 
@@ -70,7 +71,7 @@ app.on('activate', function () {
 
 function auth(){
 
-	var authWindow = new BrowserWindow({width: 800, height: 600}),
+	var authWindow = new BrowserWindow({ center: true, autoHideMenuBar: true, maximizable: false, resizable: false }),
 		webContents = authWindow.webContents;
 
 	authWindow.loadURL('https://oauth.vk.com/authorize?client_id=5329877&display=popup&redirect_uri=https://oauth.vk.com/blank.html&scope=messages&response_type=token&v=5.45');
