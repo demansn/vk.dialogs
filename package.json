@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron main.js",
     "dev": "electron main.js --debug=8086",
-    "rebuild-leveldb": "cd node_modules/level/node_modules/leveldown && set HOME=~/.electron-gyp && node-gyp rebuild --target=0.36.8 --arch=x64 --dist-url=https://atom.io/download/atom-shell"
+    "rebuild-leveldb": "cd node_modules/leveldown && set HOME=~/.electron-gyp && node-gyp rebuild --target=0.36.8 --arch=x64 --dist-url=https://atom.io/download/atom-shell"
   },
   "repository": {
     "type": "git",
