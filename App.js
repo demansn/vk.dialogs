@@ -14,7 +14,11 @@ function App(){
 
 	this.vk.on('onInit', this.load.bind(this));
 	this.vk.on('onLoadedFiends', this.initViewVKFriends.bind(this));
+	this.vk.on('onLoadedMessages', this.showMessages.bind(this));
 	this.vk.on('onLogin', this.initViewVKFriends.bind(this));
+
+	$('#friends').on('click', '.friend', this.onClickFriend.bind(this));
+	$('#button-send-message').on('click', this.onClickSendMessage.bind(this));
 
 	this.init();
 
@@ -61,8 +65,6 @@ App.prototype.saveVkData = function(data){
 
 };
 
-
-
 App.prototype.initViewVKFriends = function(friends) {
 	console.dir(friends);
 	var div = null, img = null,
@@ -72,10 +74,60 @@ App.prototype.initViewVKFriends = function(friends) {
 	for(var i = 0; i < friends.length; i += 1){
 		fr = friends[i];
 		div = document.createElement('div');
+		div.id = fr.id;
+		div.className = 'friend';
 		div.innerHTML = '<image src=' + fr.photo_50+ ' style="width:50px; height: 50px;" ></image>' + fr.first_name + ' ' + fr.last_name + ' ' + (fr.online ? 'online' : 'offline');
 		container.appendChild(div);
 	}
 
 };
+
+App.prototype.onClickFriend = function(e) {
+	this.loadDialogByUser(e.currentTarget.id);
+};
+
+App.prototype.loadDialogByUser = function(userId) {
+	this.currentUserId = userId;
+	this.vk.loadMessagesByUser({'user_id': userId});
+};
+
+App.prototype.showMessages = function(messages) {
+	console.dir(messages);
+
+	$('#message-list').children().remove();
+	this.addMessages(messages);
+
+};
+
+App.prototype.addMessages = function(messages) {
+
+	var div,
+		m;
+
+	for(var i = 0; i < messages.length; i += 1){
+
+		m = messages[i];
+		div = document.createElement('div');
+		div.id = m.id;
+
+		if(m.from_id == this.currentUserId){
+			div.className = 'message friend-message';
+		} else {
+			div.className = 'message owner-message';
+		}
+
+		div.innerHTML = m.body;
+
+		$('#message-list').append(div);
+	}
+};
+
+App.prototype.onClickSendMessage = function() {
+	var inp = $('#text-message');
+	if(this.currentUserId) {
+		this.vk.sendMessageByUser({user_id: this.currentUserId, message: inp.val()});
+	}
+
+}
 
 module.exports = App;

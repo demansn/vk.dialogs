@@ -1,0 +1,46 @@
+#friends {
+	position: absolute;
+	width: 300px;
+	height: 100%;
+	left: 0px;
+	border: black 1px solid;
+	overflow-y: scroll;
+}
+
+#dialog {
+	position: absolute;
+	left: 309px;
+}
+
+
+#input-message {
+	
+}
+
+#text-message {
+
+}
+
+#button-send-message {
+
+}
+
+
+#message-list {
+	overflow-y: scroll;
+	height: 500px;
+	height: 300px;
+}
+
+.message {
+
+}
+
+.owner-message {
+
+}
+
+.friend-message {
+	text-align: right;
+	background: aqua;
+}

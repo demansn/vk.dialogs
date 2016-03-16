@@ -1,7 +1,10 @@
 module.exports = VKController;
+
+var remote = require('remote');
 var VK = require('vksdk');
 var querystring = require('querystring');
 var EventEmitter = require('events');
+var BrowserWindow = remote.require('browser-window');
 
 function VKController() {
 
@@ -68,7 +71,7 @@ VKController.prototype.login = function() {
 			this.onLogin(data);
 		}
 
-	});
+	}.bind(this));
 };
 
 VKController.prototype.onLogin = function(data) {
@@ -82,6 +85,22 @@ VKController.prototype.loadFriends = function() {
 	this.vk.request('friends.get', {'user_id' : this.config.user_id, order: 'hints', fields: 'photo_50,online'}, 
 		function(e) {
 			this.emit('onLoadedFiends', e.response.items);
+		}.bind(this)
+	);
+};
+
+VKController.prototype.loadMessagesByUser = function(prop) {
+	this.vk.request('messages.getHistory', prop, 
+		function(e) {
+			this.emit('onLoadedMessages', e.response.items);
+		}.bind(this)
+	);
+};
+
+VKController.prototype.sendMessageByUser = function(prop) {
+	this.vk.request('messages.send', prop, 
+		function(e) {
+			this.emit('onSendedMesage', e.response);
 		}.bind(this)
 	);
 };

@@ -3,17 +3,29 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>vk.dialogs</title>
-		<style type="text/css">
-			#friends: {
-				width: 100%;
-				height: 100%;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="src/css/main.css">
 	</head>
-	<body style="width: 100%; height: 100%">
-		<div id='friends' style="position:absolute; width: 100%; height: 100%"></div>
+	<body >
+		<div id='friends'></div>
+		<div id='dialog'>
+			<div id='message-list'>
+				<div id='1' class='message friend-message'>привет</div>
+				<div id='2' class='message owner-message'>привет</div>
+				<div id='3' class='message friend-message'>sdfsdf</div>
+				<div id='4' class='message owner-message'>sdf</div>
+				<div id='5' class='message friend-message'>sdf</div>
+				<div id='6' class='message owner-message'>sdf</div>
+			</div>
+			<div id='input-message'>
+				<input id='text-message' type="text" value='Введите сообщение'></input>
+				<input id='button-send-message' type='button' value='Отправить'></input>
+			</div>
+		</div>
+
+		<!-- <script src='src/js/lib/jquery-1.12.1.min.js'></script> -->
 		<script type="text/javascript">
-			if(true){
+			window.onload = function(){
+				window['$'] = require('./src/js/lib/jquery-1.12.1.min.js');
 				var App = new require('./App');
 				var app = new App(window);
 			}
