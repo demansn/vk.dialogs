@@ -104,3 +104,11 @@ VKController.prototype.sendMessageByUser = function(prop) {
 		}.bind(this)
 	);
 };
+
+VKController.prototype.loadMessage = function(prop) {
+	this.vk.request('messages.getById', prop, 
+		function(e) {
+			this.emit('onLoadedMesage', e.response.items);
+		}.bind(this)
+	);
+};

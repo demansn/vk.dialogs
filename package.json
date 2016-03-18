@@ -1,12 +1,14 @@
 {
-  "name": "electron-quick-start",
-  "version": "0.0.1",
+  "name": "vk.dialogs",
+  "version": "0.1.0",
   "description": "",
+  "author": "demansn",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
     "dev": "electron main.js --debug=8086",
-    "rebuild-leveldb": "cd node_modules/leveldown && set HOME=~/.electron-gyp && node-gyp rebuild --target=0.36.8 --arch=x64 --dist-url=https://atom.io/download/atom-shell"
+    "rebuild-leveldb": "cd node_modules/leveldown && set HOME=~/.electron-gyp && node-gyp rebuild --target=0.36.8 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
+    "build": "electron-packager ./ vk-dialogs"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
   },
   "homepage": "",
   "devDependencies": {
+    "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.36.0",
     "node-inspector": "^0.12.7"
   },

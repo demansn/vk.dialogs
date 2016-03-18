@@ -15,6 +15,8 @@ function App(){
 	this.vk.on('onInit', this.load.bind(this));
 	this.vk.on('onLoadedFiends', this.initViewVKFriends.bind(this));
 	this.vk.on('onLoadedMessages', this.showMessages.bind(this));
+	this.vk.on('onLoadedMesage', this.addMessages.bind(this));
+	this.vk.on('onSendedMesage', this.onSendedMesage.bind(this));
 	this.vk.on('onLogin', this.initViewVKFriends.bind(this));
 
 	$('#friends').on('click', '.friend', this.onClickFriend.bind(this));
@@ -66,7 +68,7 @@ App.prototype.saveVkData = function(data){
 };
 
 App.prototype.initViewVKFriends = function(friends) {
-	console.dir(friends);
+
 	var div = null, img = null,
 		container = document.getElementById('friends'),
 		fr;
@@ -87,24 +89,26 @@ App.prototype.onClickFriend = function(e) {
 };
 
 App.prototype.loadDialogByUser = function(userId) {
+
+	if(this.currentUserId){
+		$('#' + this.currentUserId).removeClass('selected');
+	}
+
 	this.currentUserId = userId;
+
+	$('#' + this.currentUserId).addClass('selected');
+
 	this.vk.loadMessagesByUser({'user_id': userId});
+
 };
 
 App.prototype.showMessages = function(messages) {
-	console.dir(messages);
-
 	$('#message-list').children().remove();
-	this.addMessages(messages);
-
-};
-
-App.prototype.addMessages = function(messages) {
 
 	var div,
 		m;
 
-	for(var i = 0; i < messages.length; i += 1){
+	for(var i = messages.length - 1; i >= 0; i -= 1){
 
 		m = messages[i];
 		div = document.createElement('div');
@@ -120,14 +124,42 @@ App.prototype.addMessages = function(messages) {
 
 		$('#message-list').append(div);
 	}
+
+};
+
+App.prototype.addMessages = function(messages) {
+	var div,
+		m;
+
+	for(var i = messages.length - 1; i >= 0; i -= 1){
+
+		m = messages[i];
+		div = document.createElement('div');
+		div.id = m.id;
+
+		if(m.from_id == this.currentUserId){
+			div.className = 'message friend-message';
+		} else {
+			div.className = 'message owner-message';
+		}
+
+		div.innerHTML = m.body;
+
+		$('#message-list').append(div);
+	}
+
 };
 
 App.prototype.onClickSendMessage = function() {
 	var inp = $('#text-message');
 	if(this.currentUserId) {
 		this.vk.sendMessageByUser({user_id: this.currentUserId, message: inp.val()});
+		inp.val('');
 	}
+};
 
-}
+App.prototype.onSendedMesage = function(responce) {
+	this.vk.loadMessage({message_ids: responce});
+};
 
 module.exports = App;

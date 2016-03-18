@@ -1,7 +1,10 @@
+body {
+	padding: 0;
+}
 #friends {
 	position: absolute;
 	width: 300px;
-	height: 100%;
+	height: 550px;
 	left: 0px;
 	border: black 1px solid;
 	overflow-y: scroll;
@@ -10,15 +13,25 @@
 #dialog {
 	position: absolute;
 	left: 309px;
+	height: 550px;
 }
 
+.friend {
+	border: black solid 1px;
+	margin-bottom: 5px;
+}
+
+.selected {
+	background: aquamarine;
+	border-color: darkorange;
+}
 
 #input-message {
 	
 }
 
 #text-message {
-
+	width: 380px;
 }
 
 #button-send-message {
@@ -28,19 +41,24 @@
 
 #message-list {
 	overflow-y: scroll;
-	height: 500px;
-	height: 300px;
+	width: 475px;
+	height: 530px;
 }
 
 .message {
-
+	border: black 1px solid;
+	margin-bottom: 15px;
+	width: 350px;
+	min-height: 40px;
+	padding: 5px;
 }
 
 .owner-message {
-
+	left: 0px;
+	margin-left: 85px;
+	background: darkgray;
 }
 
 .friend-message {
-	text-align: right;
-	background: aqua;
+	right: 10px;
 }
