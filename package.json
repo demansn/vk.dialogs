@@ -7,21 +7,24 @@
   "scripts": {
     "start": "electron main.js",
     "dev": "electron main.js --debug=8086",
-    "rebuild-leveldb": "cd node_modules/leveldown && set HOME=~/.electron-gyp && node-gyp rebuild --target=0.36.8 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
-    "build": "electron-packager ./ vk-dialogs"
+    "build": "electron-packager ./ vk-dialogs --out=builds/ --platform=win32 --arch=x64 --ignore=/builds",
+    "pack": "node ApplicationPackaging.js",
+    "rebuild-leveldb": "cd node_modules/level/node_modules/leveldown && set HOME=~/.electron-gyp && node-gyp rebuild --target=0.36.8 --arch=x64 --dist-url=https://atom.io/download/atom-shell"
   },
   "repository": {
     "type": "git",
-    "url": "git+"
+    "url": "https://github.com/demansn/vk.dialogs.git"
   },
-  "keywords": [],
-  "author": "demansn",
+  "keywords": [
+    "vk"
+  ],
   "license": "",
   "bugs": {
     "url": ""
   },
-  "homepage": "",
+  "homepage": "https://github.com/demansn/vk.dialogs",
   "devDependencies": {
+    "asar": "^0.10.0",
     "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.36.0",
     "node-inspector": "^0.12.7"
