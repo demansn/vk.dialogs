@@ -1,5 +1,7 @@
 node_modules
-builds
+app/node_modules
+build
+releases
 db
 *.asar
 *.log
