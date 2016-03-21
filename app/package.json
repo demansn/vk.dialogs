@@ -1,0 +1,19 @@
+{
+  "name": "vk.dialogs",
+  "version": "0.1.0",
+  "description": "",
+  "author": "demansn",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/demansn/vk.dialogs.git"
+  },
+  "homepage": "https://github.com/demansn/vk.dialogs",
+  "dependencies": {
+    "level": "^1.4.0",
+    "vksdk": "^5.3.1"
+  }
+}
