@@ -24,6 +24,6 @@
     "start": "gulp start",
     "test": "gulp start --env=test",
     "install-native": "node ./tasks/install_native_module",
-    "rebuild-leveldb": "cd app/node_modules/level/ && set HOME=~/.electron-gyp && node-gyp rebuild --target=0.36.0 --arch=x64 --dist-url=https://atom.io/download/atom-shell"
+    "rebuild-leveldb": "cd app/node_modules/level/node_modules/leveldown && set HOME=~/.electron-gyp && node-gyp rebuild --target=0.36.0 --arch=x64 --dist-url=https://atom.io/download/atom-shell"
   }
 }
