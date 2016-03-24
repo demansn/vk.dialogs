@@ -1,10 +1,8 @@
 module.exports = VKController;
 
-var remote = require('remote');
 var VK = require('vksdk');
-var querystring = require('querystring');
 var EventEmitter = require('events');
-var BrowserWindow = remote.require('browser-window');
+
 
 function VKController() {
 
@@ -55,30 +53,8 @@ VKController.prototype.init = function(data){
 	this.emit('onInit');
 };
 
-VKController.prototype.login = function() {
-
-	var authWindow = new BrowserWindow({ center: true, autoHideMenuBar: true, maximizable: false, resizable: false }),
-		webContents = authWindow.webContents,
-		_this = this;
-
-	authWindow.loadURL(this.config.authURL);
-
-	webContents.on('did-get-redirect-request', function(e, oldURL, newURL, a, v, d){
-
-		if(newURL.search('https://oauth.vk.com/blank.html') != -1){
-			authWindow.close();
-			var data = querystring.parse(newURL.substring(newURL.indexOf('#') + 1));
-			this.onLogin(data);
-		}
-
-	}.bind(this));
-};
-
-VKController.prototype.onLogin = function(data) {
-
-	this.emit('onLogin', data);
+VKController.prototype.login = function(data) {
 	this.init(data);
-
 };
 
 VKController.prototype.loadFriends = function() {

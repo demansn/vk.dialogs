@@ -104,15 +104,15 @@ gulp.task('finalize', ['clean'], function () {
 
 
 gulp.task('watch', function () {
-    watch('app/**/*.js', batch(function (events, done) {
-        gulp.start('bundle-watch', done);
-    }));
+    // watch('app/**/*.js', batch(function (events, done) {
+    //     gulp.start('bundle-watch', done);
+    // }));
     watch(paths.copyFromAppDir, { cwd: 'app' }, batch(function (events, done) {
         gulp.start('copy-watch', done);
     }));
-    watch('app/**/*.less', batch(function (events, done) {
-        gulp.start('less-watch', done);
-    }));
+    // watch('app/**/*.less', batch(function (events, done) {
+    //     gulp.start('less-watch', done);
+    // }));
 });
 
 
