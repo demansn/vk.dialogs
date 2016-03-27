@@ -17,7 +17,7 @@ function onReady () {
 	vk = new VKController();
 
 	// Create the browser window.
-	mainWindow = new BrowserWindow({width: 800, height: 600, center: true, autoHideMenuBar: true, maximizable: false, resizable: false, show: false});
+	mainWindow = new BrowserWindow({width: 800, height: 600, center: true, /*autoHideMenuBar: true,*/ maximizable: true, resizable: true, show: false});
 	mainWindow.loadURL('file://' + __dirname + '/src/index.html');
 
 	loginWindow = new BrowserWindow({ center: true, autoHideMenuBar: true, maximizable: false, resizable: false, show: false });
@@ -32,8 +32,12 @@ function onReady () {
 	});
 
 	vk.on('onInit', () => mainWindow.show());
+	vk.on('onLoadedFiends', friends => {
+		mainWindow.webContents.send('init', {friends: friends});
+	});
 
 	ipc.on('mainLoaded', () => console.log('mainLoaded'));
+	ipc.on('getFriends', () => vk.loadFriends());
 
 	// Open the DevTools.
 	mainWindow.webContents.openDevTools();

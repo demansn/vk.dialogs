@@ -1,6 +1,14 @@
 'use strict'
 
 let ipc = require("electron").ipcRenderer;
-console.log('main loaded');
+let FriendsList = require('./FriendsList.js');
+let $ = require('./lib/jquery-1.12.1.min.js');
 
-ipc.send('mainLoaded');
+let friendsList = new FriendsList();
+
+ipc.send('getFriends');
+
+ipc.on('init', function(e, message){
+	friendsList.init(message.friends);
+	$('#friendsContainer').append(friendsList.view.render().el);
+})

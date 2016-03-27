@@ -60,6 +60,11 @@ VKController.prototype.login = function(data) {
 VKController.prototype.loadFriends = function() {
 	this.vk.request('friends.get', {'user_id' : this.config.user_id, order: 'hints', fields: 'photo_50,online'}, 
 		function(e) {
+			if(e.error){
+				console.error(e.error.error_msg);
+				return;
+			}
+
 			this.emit('onLoadedFiends', e.response.items);
 		}.bind(this)
 	);
