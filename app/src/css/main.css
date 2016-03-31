@@ -93,11 +93,11 @@
 	height: 10px;
 	left: 42px;
 	top: 40px;
-	background-color: green;
+	background-color: gray;
 	border-radius: 10px;
 	border: 2px white solid;
 }
 
-.friend > .offline {
-	background-color: gray;
+.friend > .online {
+	background-color: green;
 }

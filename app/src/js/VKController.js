@@ -65,7 +65,20 @@ VKController.prototype.loadFriends = function() {
 				return;
 			}
 
-			this.emit('onLoadedFiends', e.response.items);
+			this.emit('onLoadedFriends', e.response.items);
+		}.bind(this)
+	);
+};
+
+VKController.prototype.loadStatusFriends = function() {
+	this.vk.request('friends.get', {'user_id' : this.config.user_id, order: 'hints', fields: 'online'}, 
+		function(e) {
+			if(e.error){
+				console.error(e.error.error_msg);
+				return;
+			}
+
+			this.emit('onLoadedStatusFriends', e.response.items);
 		}.bind(this)
 	);
 };
