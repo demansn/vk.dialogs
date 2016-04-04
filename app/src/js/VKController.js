@@ -70,6 +70,19 @@ VKController.prototype.loadFriends = function() {
 	);
 };
 
+VKController.prototype.getFriends = function(callback) {
+	this.vk.request('friends.get', {'user_id' : this.config.user_id, order: 'hints', fields: 'photo_50,online'}, 
+		function(e) {
+			if(e.error){
+				console.error(e.error.error_msg);
+				return;
+			}
+
+			callback(e.response.items);
+		}.bind(this)
+	);
+};
+
 VKController.prototype.loadStatusFriends = function() {
 	this.vk.request('friends.get', {'user_id' : this.config.user_id, order: 'hints', fields: 'online'}, 
 		function(e) {
@@ -83,11 +96,11 @@ VKController.prototype.loadStatusFriends = function() {
 	);
 };
 
-VKController.prototype.loadMessagesByUser = function(prop) {
+VKController.prototype.loadMessagesByUser = function(prop, callback) {
 	this.vk.request('messages.getHistory', prop, 
 		function(e) {
-			this.emit('onLoadedMessages', e.response.items);
-		}.bind(this)
+			callback.call(this, e.response.items);
+		}
 	);
 };
 

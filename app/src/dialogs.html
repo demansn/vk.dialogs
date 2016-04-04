@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Диалоги</title>
+	<link rel="stylesheet" type="text/css" href="css/dialogs.css">
+</head>
+<body>
+
+	<div id='dialogs'>
+		<div id='dialog-title'></div>
+		<div id='dialogs-list'></div>
+		<div id='messages-list'></div>
+		<div id='send-btn'></div>
+		<input id='input-message' type='text'></input>
+	</div>
+
+	<script type="text/javascript">
+		'use strict'
+
+		let DialogsManger = new require('./js/DialogsManger.js');
+		let ipc = require("electron").ipcRenderer;
+
+		ipc.on('messages', messages => console.log(messages));
+
+	</script>
+
+</body>
+</html>

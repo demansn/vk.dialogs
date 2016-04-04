@@ -10,6 +10,7 @@ const ipc = electron.ipcMain;
 
 let mainWindow;
 let dialogWindow;
+let dialogsWindow;
 let loginWindow;
 let vk;
 let updateTimeout;
@@ -35,6 +36,10 @@ function onReady () {
 	// Create the browser window.
 	mainWindow = new BrowserWindow({width: 800, height: 600, center: true, /*autoHideMenuBar: true,*/ maximizable: true, resizable: true, show: false});
 
+	dialogsWindow = new BrowserWindow({width: 800, height: 600, center: true, /*autoHideMenuBar: true,*/ maximizable: true, resizable: true, show: true});
+	dialogsWindow.loadURL('file://' + __dirname + '/src/dialogs.html');
+	//dialogsWindow.show();
+
 	loginWindow = new BrowserWindow({ center: true, autoHideMenuBar: true, maximizable: false, resizable: false, show: false });
 	loginWindow.loadURL(vk.config.authURL);
 	loginWindow.webContents.on('did-get-redirect-request', (e, oldURL, newURL) => {
@@ -54,6 +59,10 @@ function onReady () {
 		mainWindow.webContents.send('onLoadedFriends', {friends: friends});
 	});
 
+/*	vk.on('onLoadedMessages', messages => {
+		ipc.send('messages', {messages: messages});
+	});*/
+
 	vk.on('onLoadedStatusFriends', friends => {
 		mainWindow.webContents.send('onLoadedStatusFriends', {friends: friends});
 	});
@@ -62,39 +71,50 @@ function onReady () {
 
 	mainWindow.webContents.openDevTools();
 
+	ipc.on('onSelectFriend', (event, frID) => openDialog(frID));
+	ipc.on('sync', sync);
 }
 
 function onLoadedMainWindow () {
 	vk.loadFriends();
-
-	update();
 }
 
-function update() {
-	//вернуть пользователей
-	//проверить новые сообщения
-	//mainWindow.webContents.send('update', {});
-	try {
-		vk.loadStatusFriends();
+function openDialog( friendId ) {
+	console.log(friendId);
 
-		clearUpdateTimeout();
+	dialogsWindow.webContents.send('open', friendId);
+/*	vk.loadMessagesByUser({'user_id': friendId}, function(messages){
+		dialogsWindow.webContents.send('messages', {messages: messages});
+	});*/
+	
+	//dialogsWindow.webContents.send('openDialog')
+}
 
-		updateTimeout = setTimeout(update, 2000);
-	} catch(e) {
-		console.error(e.message);
+
+
+function sync(e, message){
+
+	var chanal = message.callbackChanal,
+		callback = function(data){
+			e.sender.send(chanal, data);
+		};
+
+	switch(message.method){
+		case 'read':
+			readData(message.type, callback);
+			break;
 	}
 }
 
-function clearUpdateTimeout() {
-	if(updateTimeout){
-		clearTimeout(updateTimeout);
-		updateTimeout = null;
+function readData(type, callback){
+	switch(type){
+		case 'friends':
+			vk.getFriends(callback);
+			break;
 	}
 }
 
 function quit() {
-
-	clearUpdateTimeout();
 
 	// On OS X it is common for applications and their menu bar
 	// to stay active until the user quits explicitly with Cmd + Q
