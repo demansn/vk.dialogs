@@ -36,8 +36,9 @@ function onReady () {
 	// Create the browser window.
 	mainWindow = new BrowserWindow({width: 800, height: 600, center: true, /*autoHideMenuBar: true,*/ maximizable: true, resizable: true, show: false});
 
-	dialogsWindow = new BrowserWindow({width: 800, height: 600, center: true, /*autoHideMenuBar: true,*/ maximizable: true, resizable: true, show: true});
+	dialogsWindow = new BrowserWindow({width: 800, height: 600, center: true, /*autoHideMenuBar: true,*/ maximizable: true, resizable: true, show: false});
 	dialogsWindow.loadURL('file://' + __dirname + '/src/dialogs.html');
+	dialogsWindow.on('closed', () => dialogsWindow = null);
 	//dialogsWindow.show();
 
 	loginWindow = new BrowserWindow({ center: true, autoHideMenuBar: true, maximizable: false, resizable: false, show: false });
@@ -80,17 +81,22 @@ function onLoadedMainWindow () {
 }
 
 function openDialog( friendId ) {
-	console.log(friendId);
 
-	dialogsWindow.webContents.send('open', friendId);
-/*	vk.loadMessagesByUser({'user_id': friendId}, function(messages){
-		dialogsWindow.webContents.send('messages', {messages: messages});
-	});*/
-	
-	//dialogsWindow.webContents.send('openDialog')
+	if(!dialogsWindow){
+		dialogsWindow = new BrowserWindow({width: 800, height: 600, center: true, /*autoHideMenuBar: true,*/ maximizable: true, resizable: true, show: false});
+		dialogsWindow.loadURL('file://' + __dirname + '/src/dialogs.html');
+		dialogsWindow.on('closed', () => dialogsWindow = null);
+	}
+
+	if(!dialogsWindow.isVisible()){
+		dialogsWindow.show();
+	}
+
+	dialogsWindow.focus();
+
+	dialogsWindow.webContents.send('openByFriend', friendId);
+
 }
-
-
 
 function sync(e, message){
 
@@ -101,15 +107,25 @@ function sync(e, message){
 
 	switch(message.method){
 		case 'read':
-			readData(message.type, callback);
+			readData(message, callback);
 			break;
 	}
 }
 
-function readData(type, callback){
-	switch(type){
+function readData(message, callback){
+	switch(message.type){
 		case 'friends':
 			vk.getFriends(callback);
+			break;
+		case 'dialog':
+			if(message.isChat){
+
+			} else {
+				vk.getUser(message.id, callback);
+			}
+			break;
+		case 'messages':
+				vk.loadMessagesByUser({user_id: message.id, count: message.count}, callback)
 			break;
 	}
 }

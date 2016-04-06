@@ -9,7 +9,6 @@
 
 	<div id='dialogs'>
 		<div id='dialog-title'></div>
-		<div id='dialogs-list'></div>
 		<div id='messages-list'></div>
 		<div id='send-btn'></div>
 		<input id='input-message' type='text'></input>
@@ -21,7 +20,7 @@
 		let DialogsManger = new require('./js/DialogsManger.js');
 		let ipc = require("electron").ipcRenderer;
 
-		ipc.on('messages', messages => console.log(messages));
+		var dm = new DialogsManger();
 
 	</script>
 

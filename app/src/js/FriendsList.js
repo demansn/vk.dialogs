@@ -14,6 +14,7 @@ let UsersCollection = Backbone.Collection.extend({
 	initialize: function(){
 
 	},
+	onli: false,
 	sync: function(method, model, options) {
 
 		var message = {
@@ -22,9 +23,9 @@ let UsersCollection = Backbone.Collection.extend({
 				callbackChanal: 'read:friends'
 			};
 
-		ipc.once(message.callbackChanal, function(e){
-			options.success(e);
-		});
+		ipc.once(message.callbackChanal, function(e, friends){
+			options.success(friends);
+		}.bind(this));
 
 		ipc.send('sync', message);
 	}
@@ -33,7 +34,12 @@ let UsersCollection = Backbone.Collection.extend({
 let FriendsListView = Backbone.View.extend({
 	tagName: 'ul',
 	className: 'friends-list',
+	initialize: function() {
+		//this.collection.once('sync', this.render, this);
+		this.collection.on('add', this.addOne, this);
+	},
 	render: function( ){
+		this.$el.children().remove();
 		this.collection.each(this.addOne, this);
 		return this;
 	},
@@ -53,7 +59,7 @@ let UserView = Backbone.View.extend({
 	tagName: 'li',
 	className: 'friend',
 	events: {
-		'click': function(){
+		'dblclick': function(){
 			this.trigger('click', this.model.id);
 		}
 	},
@@ -83,8 +89,6 @@ let UserView = Backbone.View.extend({
 let FriendsList = function(){
 	this.users = new UsersCollection();
 	this.view = new FriendsListView({collection:this.users});
-
-	//this.view.on('onSelectFriend', friendId => this.emit('onSelectFriend', friendId));
 }
 
 FriendsList.prototype.init = function() {
@@ -115,6 +119,6 @@ FriendsList.prototype.update = function( friends ) {
 FriendsList.prototype._update = function() {
 	this.users.fetch();
 	this.updateTimeout = setTimeout(this._update.bind(this), 5000);
-}
+};
 
 module.exports = FriendsList;

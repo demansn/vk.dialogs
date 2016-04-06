@@ -1,83 +1,20 @@
-/*body {
+body {
+	margin: 5px 0 0 5px;
 	padding: 0;
 }
-#friends {
-	position: absolute;
-	width: 300px;
-	height: 550px;
-	left: 0px;
-	border: black 1px solid;
-	overflow-y: scroll;
-}
-
-#dialog {
-	position: absolute;
-	left: 309px;
-	height: 550px;
-}
-
-.friend {
-	border: black solid 1px;
-	margin-bottom: 5px;
-}
-
-.selected {
-	background: aquamarine;
-	border-color: darkorange;
-}
-
-#input-message {
-	
-}
-
-#text-message {
-	width: 380px;
-}
-
-#button-send-message {
-
-}
-
-
-#message-list {
-	overflow-y: scroll;
-	width: 475px;
-	height: 530px;
-}
-
-.message {
-	border: black 1px solid;
-	margin-bottom: 15px;
-	width: 350px;
-	min-height: 40px;
-	padding: 5px;
-}
-
-.owner-message {
-	left: 0px;
-	margin-left: 85px;
-	background: darkgray;
-}
-
-.friend-message {
-	right: 10px;
-}
-
-*/
 
 .friends-list {
-
+	padding: 0;
+	margin: 0;
 }
 
 .friend {
 	position: relative;
 	list-style-type: none;
-	margin: 0;
+	margin: 5px 5px 5px 0;
 	padding: 0;
-}
-
-.friend > img {
-	
+	height: 50px;
+	background-color: #FBFBFB;
 }
 
 .friend > .name {
@@ -85,6 +22,7 @@
 	width: 230px;
 	float: right;
 	padding-left: 20px;
+	padding-top: 18px;
 }
 
 .friend > .status {

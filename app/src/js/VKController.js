@@ -119,3 +119,16 @@ VKController.prototype.loadMessage = function(prop) {
 		}.bind(this)
 	);
 };
+
+VKController.prototype.getUser = function(id, callback) {
+	this.vk.request('users.get', {'user_id' : id, 'fields': 'photo_50, online'}, 
+		function(e) {
+			if(e.error){
+				console.error(e.error.error_msg);
+				return;
+			}
+
+			callback(e.response);
+		}.bind(this)
+	);
+};
