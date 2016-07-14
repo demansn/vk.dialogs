@@ -1,7 +1,6 @@
 'use strict'
 
-const Tray = require('tray');
-const Menu = require('menu');
+const {app, Menu, Tray} = require('electron');
 const path = require('path');
 const EventEmitter = require('events');
 let trayIcon = null;
@@ -23,7 +22,7 @@ var trayMenuTemplate = [
 		click: function () {
 			ipc.send('open-settings-window');
 		}
-	},
+	},+
 	{
 		label: 'Quit',
 		click: function () {
